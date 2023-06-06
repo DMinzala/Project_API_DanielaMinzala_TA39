@@ -11,4 +11,4 @@ def generate_token():
     }
 
     response = requests.post("https://simple-books-api.glitch.me/api-clients/", json=request_body)
-    return response.json()["access_Token"]
+    return response.json()["accessToken"]

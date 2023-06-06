@@ -1,4 +1,4 @@
-from API_Testing.Requests_folder.Get_all_books import get_all_books
+from requests_folder.Get_all_books import get_all_books
 
 
 class Test_get_books:
@@ -26,39 +26,43 @@ class Test_get_books:
     def test_get_all_books_filter_by_type_non_existing_type(self):
         response = get_all_books("comedy")
         assert response.status_code == 400, f"Error: invalid status code. Expected 400, but got {response.status_code}"
-        assert response.json()["error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
+        assert response.json()[
+                   "error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
 
     def test_get_all_books_filter_by_type_invalid_type_special_characters(self):
-        response = get_all_books("!@£$%^&*()_-=[];'\,./<>?:|{}")
+        response = get_all_books("!@£$%^&*()_-=[];'\\,./<>?:|{}")
         assert response.status_code == 400, f"Error: invalid status code. Expected 400, but got {response.status_code}"
-        assert response.json()["error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
+        assert response.json()[
+                   "error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
 
     def test_get_all_books_filter_by_type_invalid_type_numbers(self):
         response = get_all_books("12234567890")
         assert response.status_code == 400, f"Error: invalid status code. Expected 400, but got {response.status_code}"
-        assert response.json()["error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
+        assert response.json()[
+                   "error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
 
     def test_get_all_books_filter_by_type_with_space(self):
         response = get_all_books("non fiction")
         assert response.status_code == 400, f"Error: invalid status code. Expected 400, but got {response.status_code}"
-        assert response.json()["error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
+        assert response.json()[
+                   "error"] == "Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.", f"Invalid error message. Expected: 'Invalid value for query parameter 'type'. Must be one of: fiction, non-fiction.', actual: {response.json()['error']}"
 
-    def test_get_all_books_filter_by_limit_inf(self, limit):
-        response = get_all_books(limit<=1)
-        assert response.status_code == 200, f"Error: the expected status code is 200 but got {response.status_code}
-        assert len(response) == 1, f"Error: the number of results returned is incorrect"
+    def test_get_all_books_filter_by_limit_inf(self):
+        response = get_all_books(limit=1)
+        assert response.status_code == 200, f"Error: the expected status code is 200 but got {response.status_code}"
+        assert len(response.json()) == 1, f"Error: the number of results returned is incorrect"
 
-    def test_get_all_books_filter_by_limit_between(self, limit):
-        response = get_all_books(1<=limit<=20)
-        assert response.status_code == 200, f"Error: the expected status code is 200 but got {response.status_code}
-        assert len(response) == 6, f"Error: the number of results returned is incorrect"
+    def test_get_all_books_filter_by_limit_between(self):
+        response = get_all_books(limit=5)
+        assert response.status_code == 200, f"Error: the expected status code is 200 but got {response.status_code}"
+        assert len(response.json()) == 5, f"Error: the number of results returned is incorrect"
 
-    def test_get_all_books_filter_by_limit_sup(self, limit):
-        response = get_all_books(limit>=21)
+    def test_get_all_books_filter_by_limit_sup(self):
+        response = get_all_books(limit=21)
         assert response.status_code == 400, f"Error: invalid status code. Expected 400, but got {response.status_code}"
         assert response.json()["error"] == "Invalid value for query parameter 'limit'. Cannot be greater than 20.", f"Invalid error message. Expected: 'Invalid value for query parameter 'limit'. Cannot be greater than 20.', actual: {response.json()['error']}"
 
-    def test_get_all_books_filter_by_limit_negative(self, limit):
-        response = get_all_books(limit<0)
+    def test_get_all_books_filter_by_limit_negative(self):
+        response = get_all_books(limit=-1)
         assert response.status_code == 400, f"Error: invalid status code. Expected 400, but got {response.status_code}"
         assert response.json()["error"] == "Invalid value for query parameter 'limit'. Must be greater than 0.", f"Invalid error message. Expected: 'Invalid value for query parameter 'limit'. Must be greater than 0.', actual: {response.json()['error']}"

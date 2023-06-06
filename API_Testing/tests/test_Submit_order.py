@@ -1,4 +1,4 @@
-from API_Testing.Requests_folder.Submit_order import submit_order
+from requests_folder.Submit_order import submit_order
 
 
 class Test_submit_order():
@@ -7,7 +7,7 @@ class Test_submit_order():
         response = submit_order(1, "John")
         assert response.status_code == 201, f"Error: invalid status code. Expected 201, but got {response.status_code}"
         assert len(response.json()["orderId"]) > 0, "Error, invalid orderid length"
-        assert response.json()["created"]==True, "Error: created status is incorrect"
+        assert response.json()["created"] == True, "Error: created status is incorrect"
 
     def test_submit_order_missing_book_id(self):
         response = submit_order(customer_name="John")

@@ -10,6 +10,6 @@ def get_all_books(type="", limit=""):
         response = requests.get(f'https://simple-books-api.glitch.me/books?limit={limit}')
     else:
         response = requests.get(f'https://simple-books-api.glitch.me/books?type={type}&limit={limit}')
-        return response
+    return response
 
 
